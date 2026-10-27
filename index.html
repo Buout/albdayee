@@ -20,11 +20,29 @@ button,a,input{font:inherit}a{color:inherit}.wrap{width:min(1080px,calc(100% - 3
 .questions-section{padding:22px 0 55px}.questions-header{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:15px}.questions-header p{color:var(--muted);font-size:.98rem;margin:5px 0}.q-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.q-card{background:#fff;border:1px solid #e4e9df;border-radius:18px;padding:20px;box-shadow:0 5px 20px #1c503010}.q-card p{margin:0 0 18px;font-weight:700;font-size:1rem}.q-head{font-size:.82rem;color:#14694d;font-weight:bold;margin-bottom:9px}.answer{display:inline-block;white-space:normal;text-align:center;border:0;background:linear-gradient(#fff0ad,#d9b563);color:#4e3f15;text-decoration:none;padding:8px 17px;border-radius:100px;box-shadow:0 4px 0 #a48842,inset 0 2px 2px #fff9;font-size:.9rem;font-weight:900}
 footer{background:#123e32;color:#d7e4dc;padding:22px 0;font-size:.9rem;text-align:center}footer a{color:#f0dfa3}.loading-dot{display:inline-block;animation:pulse 1s infinite alternate}@keyframes pulse{to{opacity:.25}}
 @media(max-width:650px){body{font-size:20px}.hero{padding-bottom:58px}.hero-main{padding-top:32px}.toolbar{padding:13px}.filter{padding:7px 13px}.search{max-width:none}.timeline:before{right:41px}.year-block{padding-right:96px}.calendar{width:73px;min-height:92px}.calendar:before{height:21px}.year-number{font-size:1.22rem;line-height:1.35}.event{padding:13px}.event:before{right:-45px;width:45px;top:47px}.event:after{right:-52px;top:42px}.orb{width:58px;height:58px;font-size:.76rem}.q-list{grid-template-columns:1fr}.intro h2{font-size:1.38rem}.event-text{font-size:1rem}.event-foot{font-size:.8rem}}
+
+/* إصلاح نقاط التقاء الخط، ووضع الأحداث بعد رزنامة السنة */
+.timeline:before{height:var(--timeline-height,0px);bottom:auto;z-index:0}
+.year-block{z-index:1}
+.calendar{z-index:2}
+.events{padding-top:125px}
+.year-block .event:before{z-index:0}
+.year-block .event:after{z-index:1}
+.year-block .event{z-index:1}
+.undated-section{margin:26px 0 35px;padding-top:18px;border-top:2px solid #e0d9bc}
+.undated-section[hidden]{display:none}
+.undated-section h2{font-size:1.55rem;margin:0 0 4px}
+.undated-section>p{margin:0 0 16px;color:var(--muted)}
+.undated-group{margin:15px 0 22px}
+.undated-label{display:inline-flex;align-items:center;padding:5px 17px;border-radius:12px;background:#e8e1cf;color:#51432d;box-shadow:inset 0 1px #fff,0 3px 7px #0001;font-weight:bold}
+.undated-events{display:grid;gap:11px;margin-top:10px}
+.undated-events .event:before,.undated-events .event:after{display:none}
+@media(max-width:650px){.events{padding-top:114px}.year-block .event:before{top:42px}.year-block .event:after{top:37px}}
 </style>
 </head>
 <body>
 <header class="hero"><div class="wrap hero-inner"><div class="topbar"><div class="brand">◈ <span>أوائل</span> البدائع</div><nav class="toplinks"><a class="pill-link" href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=0#gid=0" target="_blank" rel="noopener">الصفحة الأولى: أوائل ↗</a><a class="submit-link" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">✉ أرسل معلومة</a></nav></div><div class="hero-main"><small>ذاكرة المكان وأهله</small><h1>أوائل البدائع</h1><p>محطات وأخبار وأحداث من تاريخ البدائع، مرتبة سنةً بعد سنة، مع توثيق مصادرها ومشاركة الأهالي.</p></div><img id="header-image" class="hero-img" alt="الصورة التاريخية لرأس الصفحة" src="header.jpg" hidden onload="this.hidden=false" onerror="this.hidden=true"></div></header>
-<main class="wrap"><section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الحدث</button><button class="filter" data-filter="خبر">الخبر</button></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
+<main class="wrap"><section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الحدث</button><button class="filter" data-filter="خبر">الخبر</button></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>المعلومات التي كُتب في خانة العام وصف بدلاً من رقم، تظهر هنا بعد نهاية التسلسل الزمني.</p><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
 <footer><div class="wrap">أوائل البدائع — سجل توثيقي يعتمد على المصادر والمعلومات الموافق على نشرها. <a href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">شارك بمعلومة</a></div></footer>
 <script>
 'use strict';
@@ -51,12 +69,37 @@ function normalize(s){return String(s??'').replace(/[\u200e\u200f\u202a-\u202e]/
 function parseCSV(text){text=text.replace(/^\uFEFF/,'');const rows=[];let row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(c===','&&!quoted){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);if(row.some(x=>x.trim()))rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(x=>x.trim()))rows.push(row);return rows}
 function check(v){const s=normalize(v).toLowerCase();return ['true','1','yes','نعم','صح','✓','✔','☑','✅','checked'].includes(s)}
 function kind(v){const s=normalize(v);if(s.includes('أوائل')||s.includes('اوائل')||s==='أول')return'أوائل';if(s.includes('خبر'))return'خبر';return'حدث'}
-function year(v){const s=normalize(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g,c=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(c));const m=s.match(/\d{3,4}/);return m?m[0]:s}
+function year(v){const s=normalize(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g,c=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(c));return s}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function mapEvents(rows){const header=rows[0]?.map(normalize)||[];const hasHeader=header.some(x=>['الموافقة','العام','الخبر','النوع'].includes(x));return rows.slice(hasHeader?1:0).filter(r=>check(r[0])&&normalize(r[3])).map((r,i)=>({year:year(r[1]),text:normalize(r[3]),type:kind(r[2]),domain:normalize(r[4]),source:normalize(r[5]),order:i})).filter(x=>x.year)}
 function safeSort(a,b){return (parseInt(a.year,10)||0)-(parseInt(b.year,10)||0)||a.order-b.order}
 function setStatus(msg,error=false){const el=document.getElementById('status');el.textContent=msg;el.classList.toggle('error',error)}
-function render(){const filtered=entries.filter(e=>(currentFilter==='all'||e.type===currentFilter)&&(!q||[e.text,e.year,e.source,e.domain,e.type].join(' ').includes(q))).sort(safeSort);const years=new Map();for(const e of filtered){if(!years.has(e.year))years.set(e.year,[]);years.get(e.year).push(e)}const root=document.getElementById('timeline');if(!filtered.length){root.innerHTML='<div class="empty">لا توجد نتائج مطابقة للبحث أو الفلتر.</div>';return}root.innerHTML=[...years].map(([y,items])=>{const isNumeric=/^\d{3,4}$/.test(String(y).trim());const calendarNumber=isNumeric?esc(y):'—';const yearUnit=isNumeric?'هجري':'عام';const note=isNumeric?'':`<div class="year-note"><strong>ملاحظة العام:</strong> ${esc(y)}</div>`;return `<section class="year-block"><div class="calendar" aria-label="سنة ${esc(y)}"><div class="rings"><i></i><i></i></div><div class="year-number">${calendarNumber}</div><div class="year-unit">${yearUnit}</div></div><div class="events">${items.map(e=>`<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div></article>`).join('')}</div>${note}</section>`}).join('')}
+function renderEvent(e){return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div></article>`}
+function numericYear(y){return /^\d{3,4}(?:\s*(?:هـ|ه|H|م))?$/i.test(normalize(y))}
+function setTimelineEnd(){
+ const root=document.getElementById('timeline');const last=root.querySelector('.year-block:last-child .event:last-child');
+ if(!last){root.style.setProperty('--timeline-height','0px');return}
+ const start=root.getBoundingClientRect().top;const bounds=last.getBoundingClientRect();
+ const dotOffset=window.matchMedia('(max-width:650px)').matches?43:42;
+ root.style.setProperty('--timeline-height',Math.max(0,Math.round(bounds.top-start+dotOffset))+'px');
+}
+function render(){
+ const filtered=entries.filter(e=>(currentFilter==='all'||e.type===currentFilter)&&(!q||[e.text,e.year,e.source,e.domain,e.type].join(' ').includes(q))).sort(safeSort);
+ const chronological=new Map(),undated=new Map();
+ for(const item of filtered){const groups=numericYear(item.year)?chronological:undated;if(!groups.has(item.year))groups.set(item.year,[]);groups.get(item.year).push(item)}
+ const root=document.getElementById('timeline');
+ root.innerHTML=[...chronological].map(([y,items])=>{
+   const gregorian=/م$/.test(y);const value=y.replace(/(?:هـ|ه|H|م)$/i,'').trim();
+   return `<section class="year-block"><div class="calendar" aria-label="سنة ${esc(y)}"><div class="rings"><i></i><i></i></div><div class="year-number">${esc(value)}</div><div class="year-unit">${gregorian?'ميلادي':'هجري'}</div></div><div class="events">${items.map(renderEvent).join('')}</div></section>`;
+ }).join('');
+ const block=document.getElementById('undated-section');const list=document.getElementById('undated-list');
+ block.hidden=undated.size===0;
+ list.innerHTML=[...undated].map(([y,items])=>`<section class="undated-group"><div class="undated-label">${esc(y)}</div><div class="undated-events">${items.map(renderEvent).join('')}</div></section>`).join('');
+ if(!filtered.length)root.innerHTML='<div class="empty">لا توجد نتائج مطابقة للبحث أو الفلتر.</div>';
+ else if(!chronological.size)root.innerHTML='';
+ requestAnimationFrame(setTimelineEnd);
+}
+window.addEventListener('resize',setTimelineEnd);
 function renderQuestions(){document.getElementById('question-list').innerHTML=questions.map((x,i)=>`<article class="q-card"><div class="q-head">سؤال ${i+1}</div><p>${esc(x)}</p><a class="answer" href="${FORM}" target="_blank" rel="noopener">اضغط إذا كان لديك جواب ↗</a></article>`).join('')}
 async function readCSV(url){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),14000);try{const r=await fetch(url,{cache:'no-store',signal:ctrl.signal,redirect:'follow'});if(!r.ok)throw Error('HTTP '+r.status);const raw=await r.text();if(/^\s*<!doctype html|^\s*<html/i.test(raw))throw Error('HTML response');return parseCSV(raw)}finally{clearTimeout(timer)}}
 async function tryURLs(urls,mapper){let err;for(const url of urls){try{const v=mapper(await readCSV(url));if(v.length)return v}catch(e){err=e;console.warn('تعذر جلب البيانات:',e.message)}}throw err||Error('لا توجد بيانات')}
