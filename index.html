@@ -38,11 +38,33 @@ footer{background:#123e32;color:#d7e4dc;padding:22px 0;font-size:.9rem;text-alig
 .undated-events{display:grid;gap:11px;margin-top:10px}
 .undated-events .event:before,.undated-events .event:after{display:none}
 @media(max-width:650px){.events{padding-top:114px}.year-block .event:before{top:42px}.year-block .event:after{top:37px}}
+
+/* الرأس التراثي الجديد: الصورة تحتوي على العنوان العربي بالفعل، فلا نكرر العنوان فوقها */
+body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
+.hero{background:#f6f5ef;padding:0;overflow:visible;color:var(--ink)}
+.hero:before{display:none}
+.hero-banner{display:block;width:100%;height:auto;aspect-ratio:4/1;object-fit:cover;object-position:center}
+.header-actions{display:flex;justify-content:flex-start;align-items:center;padding:12px 0 24px}
+.header-actions .toplinks{width:100%;justify-content:flex-start}
+.header-actions .pill-link{background:#f8f3e8;border:1px solid #d2bd8b;color:#385348}
+.header-actions .submit-link{background:#f0dfac;color:#354532;border-color:#d8bc69}
+.toolbar{margin-top:0}
+.intro h2,.questions-title,.undated-section h2{font-size:1.95rem;font-weight:900}
+.event-text{font-size:1.35rem;line-height:1.65}
+.year-number{font-size:1.72rem}
+.undated-cta,.year-answer{display:inline-flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;background:linear-gradient(#fff2bd,#ddbc69);border:1px solid #c6a45b;color:#3c381f;font-weight:800;border-radius:13px;padding:8px 18px;box-shadow:0 4px 0 #a98c4f,inset 0 2px 2px #fff9;transition:transform .15s,box-shadow .15s}
+.undated-cta:hover,.year-answer:hover{transform:translateY(-2px);box-shadow:0 6px 0 #a98c4f,inset 0 2px 2px #fff9}
+.undated-cta:focus-visible,.year-answer:focus-visible{outline:3px solid #14694d;outline-offset:5px}
+.undated-cta{margin:2px 0 18px;font-size:1.22rem}
+.undated-item{margin-bottom:12px}
+.undated-item>.event{border-radius:16px 16px 8px 8px}
+.year-answer{font-size:1.12rem;margin:9px 12px 6px}
+@media(max-width:650px){body{font-size:20px}.hero-banner{aspect-ratio:4/1}.header-actions{padding:11px 0 18px}.header-actions .toplinks{justify-content:center}.header-actions .pill-link,.header-actions .submit-link{padding:7px 12px;font-size:.95rem}.event-text{font-size:1.15rem}.undated-cta,.year-answer{font-size:1.05rem}.year-number{font-size:1.38rem}}
 </style>
 </head>
 <body>
-<header class="hero"><div class="wrap hero-inner"><div class="topbar"><div class="brand">◈ <span>أوائل</span> البدائع</div><nav class="toplinks"><a class="pill-link" href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=0#gid=0" target="_blank" rel="noopener">الصفحة الأولى: أوائل ↗</a><a class="submit-link" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">✉ أرسل معلومة</a></nav></div><div class="hero-main"><small>ذاكرة المكان وأهله</small><h1>أوائل البدائع</h1><p>محطات وأخبار وأحداث من تاريخ البدائع، مرتبة سنةً بعد سنة، مع توثيق مصادرها ومشاركة الأهالي.</p></div><img id="header-image" class="hero-img" alt="الصورة التاريخية لرأس الصفحة" src="header.jpg" hidden onload="this.hidden=false" onerror="this.hidden=true"></div></header>
-<main class="wrap"><section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الحدث</button><button class="filter" data-filter="خبر">الخبر</button></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>المعلومات التي كُتب في خانة العام وصف بدلاً من رقم، تظهر هنا بعد نهاية التسلسل الزمني.</p><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
+<header class="hero"><img class="hero-banner" src="header.png" alt="أوائل البدائع — أوائل، أحداث، أخبار" fetchpriority="high"><div class="header-actions wrap"><nav class="toplinks"><a class="pill-link" href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=0#gid=0" target="_blank" rel="noopener">الصفحة الأولى: أوائل ↗</a><a class="submit-link" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">✉ أرسل معلومة</a></nav></div></header>
+<main class="wrap"><section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الحدث</button><button class="filter" data-filter="خبر">الخبر</button></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>هل تعرف سنة وقوع أحد هذه الأحداث؟ ساعد في توثيق تاريخ البدائع.</p><a class="undated-cta" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">📅 لدي معلومة عن سنة حدث — أرسلها</a><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
 <footer><div class="wrap">أوائل البدائع — سجل توثيقي يعتمد على المصادر والمعلومات الموافق على نشرها. <a href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">شارك بمعلومة</a></div></footer>
 <script>
 'use strict';
@@ -94,7 +116,7 @@ function render(){
  }).join('');
  const block=document.getElementById('undated-section');const list=document.getElementById('undated-list');
  block.hidden=undated.size===0;
- list.innerHTML=[...undated].map(([y,items])=>`<section class="undated-group"><div class="undated-label">${esc(y)}</div><div class="undated-events">${items.map(renderEvent).join('')}</div></section>`).join('');
+ list.innerHTML=[...undated].map(([y,items])=>`<section class="undated-group"><div class="undated-label">${esc(y)}</div><div class="undated-events">${items.map(e=>`<div class="undated-item">${renderEvent(e)}<a class="year-answer" href="${FORM}" target="_blank" rel="noopener" aria-label="أرسل السنة الصحيحة لهذا الحدث">📅 هل تعرف سنة هذا الحدث؟ اضغط للإجابة</a></div>`).join('')}</div></section>`).join('');
  if(!filtered.length)root.innerHTML='<div class="empty">لا توجد نتائج مطابقة للبحث أو الفلتر.</div>';
  else if(!chronological.size)root.innerHTML='';
  requestAnimationFrame(setTimelineEnd);
