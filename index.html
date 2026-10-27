@@ -60,11 +60,40 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
 .undated-item>.event{border-radius:16px 16px 8px 8px}
 .year-answer{font-size:1.12rem;margin:9px 12px 6px}
 @media(max-width:650px){body{font-size:20px}.hero-banner{aspect-ratio:4/1}.header-actions{padding:11px 0 18px}.header-actions .toplinks{justify-content:center}.header-actions .pill-link,.header-actions .submit-link{padding:7px 12px;font-size:.95rem}.event-text{font-size:1.15rem}.undated-cta,.year-answer{font-size:1.05rem}.year-number{font-size:1.38rem}}
+
+/* أزرار مستوحاة من ألوان الغروب والحجر الرملي في صورة رأس الصفحة */
+.header-actions{display:none}
+.toolbar{margin-top:0}
+.filters{align-items:center;gap:12px}
+.filters .filter,.filters .submit-filter{
+  position:relative;isolation:isolate;min-height:56px;padding:10px 23px;
+  display:inline-flex;align-items:center;justify-content:center;text-align:center;
+  border-radius:999px;border:1px solid #d0a465;
+  font-family:'Traditional Arabic',Tahoma,serif;font-size:1.3rem;font-weight:900;
+  text-decoration:none;cursor:pointer;color:#513326;
+  background:linear-gradient(160deg,#fff0cb 0%,#f3d7a0 34%,#d99b60 100%);
+  box-shadow:inset 0 3px 3px #fff9,inset 0 -4px 7px #87441a35,0 5px 0 #a66e41,0 8px 14px #51332625;
+  text-shadow:0 1px 1px #fff8;
+  transition:transform .18s,box-shadow .18s,filter .18s;
+}
+.filters .filter:before,.filters .submit-filter:before{
+ content:'';position:absolute;pointer-events:none;z-index:-1;top:5px;right:17%;width:65%;height:32%;
+ border-radius:100% 100% 55% 55%;background:linear-gradient(#ffffffbd,#ffffff0a);
+}
+.filters .filter[data-filter="أوائل"]{background:linear-gradient(155deg,#fff0ba,#dab56c 54%,#ad7439);color:#49331f}
+.filters .filter[data-filter="حدث"]{background:linear-gradient(155deg,#ffe9bd,#ebaa68 53%,#b76f51);color:#593525}
+.filters .filter[data-filter="خبر"]{background:linear-gradient(155deg,#f5bac0,#c76a77 54%,#843e58);border-color:#ac6870;color:#fff9e9;text-shadow:0 1px 2px #582d3b}
+.filters .filter.active{background:linear-gradient(155deg,#82466c,#5c345b 55%,#35283e);border-color:#6f4c61;color:#fff2d8;box-shadow:inset 0 3px 5px #ffffff48,inset 0 -5px 8px #241b2c8a,0 5px 0 #342437,0 8px 14px #37243945}
+.filters .submit-filter{background:linear-gradient(155deg,#ffe8a2,#eeb45d 52%,#ba7841);color:#48301e;border-color:#c88b48;white-space:nowrap}
+.filters .filter:hover,.filters .submit-filter:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.filters .filter:active,.filters .submit-filter:active{transform:translateY(3px);box-shadow:inset 0 3px 7px #603a2540,0 2px 0 #a66e41}
+.filters .filter:focus-visible,.filters .submit-filter:focus-visible{outline:3px solid #604169;outline-offset:5px}
+@media(max-width:650px){.filters{gap:9px}.filters .filter,.filters .submit-filter{padding:7px 15px;min-height:48px;font-size:1.08rem}.filters .submit-filter{white-space:normal}}
 </style>
 </head>
 <body>
-<header class="hero"><img class="hero-banner" src="header.png" alt="أوائل البدائع — أوائل، أحداث، أخبار" fetchpriority="high"><div class="header-actions wrap"><nav class="toplinks"><a class="pill-link" href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=0#gid=0" target="_blank" rel="noopener">الصفحة الأولى: أوائل ↗</a><a class="submit-link" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">✉ أرسل معلومة</a></nav></div></header>
-<main class="wrap"><section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الحدث</button><button class="filter" data-filter="خبر">الخبر</button></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>هل تعرف سنة وقوع أحد هذه الأحداث؟ ساعد في توثيق تاريخ البدائع.</p><a class="undated-cta" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">📅 لدي معلومة عن سنة حدث — أرسلها</a><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
+<header class="hero"><img class="hero-banner" src="header.png" alt="أوائل البدائع — أوائل، أحداث، أخبار" fetchpriority="high"></header>
+<main class="wrap"><section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الحدث</button><button class="filter" data-filter="خبر">الخبر</button><a class="submit-filter" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener" aria-label="أرسل معلومة عبر النموذج">✉ أرسل معلومة</a></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>هل تعرف سنة وقوع أحد هذه الأحداث؟ ساعد في توثيق تاريخ البدائع.</p><a class="undated-cta" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">📅 لدي معلومة عن سنة حدث — أرسلها</a><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
 <footer><div class="wrap">أوائل البدائع — سجل توثيقي يعتمد على المصادر والمعلومات الموافق على نشرها. <a href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">شارك بمعلومة</a></div></footer>
 <script>
 'use strict';
