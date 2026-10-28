@@ -191,6 +191,13 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
  .arrow-action svg{width:28px;height:28px}
 }
 </style>
+<style>
+/* رابط المرفق من العمود H بجانب سهمَي المشاركة والتحميل */
+.book-attachment{display:inline-flex!important;vertical-align:middle;text-decoration:none!important}
+.book-attachment svg{width:30px;height:30px}
+.book-attachment:hover svg{transform:translateY(-2px) scale(1.08)}
+@media(max-width:650px){.book-attachment svg{width:27px;height:27px}}
+</style>
 </head>
 <body>
 <header class="hero"><img class="hero-banner" src="header.png" alt="أوائل البدائع — أوائل، أحداث، أخبار" fetchpriority="high"></header>
@@ -223,14 +230,17 @@ function parseCSV(text){text=text.replace(/^\uFEFF/,'');const rows=[];let row=[]
 function check(v){const s=normalize(v).toLowerCase();return ['true','1','yes','نعم','صح','✓','✔','☑','✅','checked'].includes(s)}
 function kind(v){const s=normalize(v);if(s.includes('أوائل')||s.includes('اوائل')||s==='أول')return'أوائل';if(s.includes('خبر'))return'خبر';return'حدث'}
 function year(v){const s=normalize(v).replace(/[٠-٩]/g,c=>'٠١٢٣٤٥٦٧٨٩'.indexOf(c)).replace(/[۰-۹]/g,c=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(c));return s}
+function safeExternalUrl(v){try{const u=new URL(normalize(v));return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function mapEvents(rows){const header=rows[0]?.map(normalize)||[];const hasHeader=header.some(x=>['الموافقة','العام','الخبر','النوع'].includes(x));return rows.slice(hasHeader?1:0).filter(r=>check(r[0])&&normalize(r[3])).map((r,i)=>({year:year(r[1]),text:normalize(r[3]),type:kind(r[2]),domain:normalize(r[4]),source:normalize(r[5]),order:i})).filter(x=>x.year)}
+function mapEvents(rows){const header=rows[0]?.map(normalize)||[];const hasHeader=header.some(x=>['الموافقة','العام','الخبر','النوع'].includes(x));return rows.slice(hasHeader?1:0).filter(r=>check(r[0])&&normalize(r[3])).map((r,i)=>({year:year(r[1]),text:normalize(r[3]),type:kind(r[2]),domain:normalize(r[4]),source:normalize(r[5]),attachment:safeExternalUrl(r[7]),order:i})).filter(x=>x.year)}
 function safeSort(a,b){return (parseInt(a.year,10)||0)-(parseInt(b.year,10)||0)||a.order-b.order}
 function setStatus(msg,error=false){const el=document.getElementById('status');el.textContent=msg;el.classList.toggle('error',error)}
 const DOWNLOAD_ARROW='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="blueArrow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e1fcff"/><stop offset=".32" stop-color="#82dcff"/><stop offset=".68" stop-color="#229ad9"/><stop offset="1" stop-color="#1363ac"/></linearGradient></defs><path d="M19 5h10v20h10L24 43 9 25h10Z" fill="url(#blueArrow)" stroke="#327fbb" stroke-width="1.3" stroke-linejoin="round"/><path d="M22 8h3v19" fill="none" stroke="#fff" stroke-width="2.3" opacity=".9" stroke-linecap="round"/></svg>';
 const SHARE_ARROW='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="greenArrow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e1ffe9"/><stop offset=".32" stop-color="#83edaa"/><stop offset=".68" stop-color="#1ba56b"/><stop offset="1" stop-color="#09633e"/></linearGradient></defs><path d="M9 34Q10 20 29 20V10l13 14-13 13v-9Q17 25 9 34Z" fill="url(#greenArrow)" stroke="#16814f" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 26Q22 20 31 23" fill="none" stroke="#fff" stroke-width="2" opacity=".8" stroke-linecap="round"/></svg>';
+const BOOK_ICON='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="bookGold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff7cf"/><stop offset=".45" stop-color="#dcb96d"/><stop offset="1" stop-color="#96713b"/></linearGradient></defs><path d="M24 10C18 6 11 7 5 9v28c7-2 14-1 19 3 5-4 12-5 19-3V9c-6-2-13-3-19 1Z" fill="url(#bookGold)" stroke="#83612c" stroke-width="2" stroke-linejoin="round"/><path d="M24 10v30M9 15c5-1 9-1 12 2M27 17c3-3 7-3 12-2M9 22c4-1 8 0 12 2M27 24c4-2 8-3 12-2" stroke="#fff9df" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+function bookAttachment(e){return e.attachment?`<a class="arrow-action book-attachment" href="${esc(e.attachment)}" target="_blank" rel="noopener noreferrer" title="مرفق" aria-label="فتح المرفق الخارجي">${BOOK_ICON}</a>`:''}
 function shareControls(kind,id){return `<div class="share-actions" aria-label="مشاركة وتحميل"><button type="button" class="arrow-action" data-share-action="download" data-${kind}-id="${id}" title="تحميل" aria-label="تحميل الصورة">${DOWNLOAD_ARROW}</button><button type="button" class="arrow-action" data-share-action="image" data-${kind}-id="${id}" title="مشاركة" aria-label="مشاركة الصورة">${SHARE_ARROW}</button></div>`}
-function renderEvent(e){const idx=entries.indexOf(e);return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div>${shareControls('event',idx)}</article>`}
+function renderEvent(e){const idx=entries.indexOf(e);return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div>${shareControls('event',idx).replace('</div>',bookAttachment(e)+'</div>')}</article>`}
 
 // رسم بطاقة عمودية بخلفية وملف مستقل دون الاعتماد على مكتبات خارجية
 let cachedLogoPromise;
