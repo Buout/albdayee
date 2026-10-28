@@ -163,6 +163,34 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
   .event-head>.orb{width:48px;height:48px;flex:0 0 48px;min-width:48px;min-height:48px;}
 }
 </style>
+
+<style>
+/* أيقونات بلا خلفيات، أسفل بطاقة الحدث يسارًا */
+.event .event-head{justify-content:flex-start}
+.event .share-actions,.q-card .share-actions{
+ display:flex;direction:ltr;justify-content:flex-start;align-items:center;
+ gap:8px;margin:12px 0 0;padding:4px 0 0;border:0;
+}
+.event .share-actions{border-top:1px solid #eee8da}
+.event .arrow-action,.q-card .arrow-action{
+ appearance:none;-webkit-appearance:none;background:transparent!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ padding:0!important;margin:0!important;flex:0 0 36px!important;
+ width:36px!important;height:36px!important;min-width:0!important;min-height:0!important;
+ display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+ color:inherit;overflow:visible;line-height:1;
+}
+.arrow-action svg{display:block;width:31px;height:31px;overflow:visible;filter:drop-shadow(0 2px 1px #0003) drop-shadow(0 3px 3px #0002);transition:transform .15s ease,filter .15s ease}
+.arrow-action:hover svg{transform:translateY(-2px) scale(1.08);filter:drop-shadow(0 4px 3px #0004)}
+.arrow-action:focus-visible{outline:2px solid #227a5d!important;outline-offset:3px}
+.arrow-action:disabled{opacity:.5;cursor:wait}
+.q-card .share-actions{margin-top:10px}
+@media(max-width:650px){
+ .event .share-actions,.q-card .share-actions{gap:8px}
+ .event .arrow-action,.q-card .arrow-action{width:32px!important;height:32px!important;flex-basis:32px!important}
+ .arrow-action svg{width:28px;height:28px}
+}
+</style>
 </head>
 <body>
 <header class="hero"><img class="hero-banner" src="header.png" alt="أوائل البدائع — أوائل، أحداث، أخبار" fetchpriority="high"></header>
@@ -199,7 +227,10 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function mapEvents(rows){const header=rows[0]?.map(normalize)||[];const hasHeader=header.some(x=>['الموافقة','العام','الخبر','النوع'].includes(x));return rows.slice(hasHeader?1:0).filter(r=>check(r[0])&&normalize(r[3])).map((r,i)=>({year:year(r[1]),text:normalize(r[3]),type:kind(r[2]),domain:normalize(r[4]),source:normalize(r[5]),order:i})).filter(x=>x.year)}
 function safeSort(a,b){return (parseInt(a.year,10)||0)-(parseInt(b.year,10)||0)||a.order-b.order}
 function setStatus(msg,error=false){const el=document.getElementById('status');el.textContent=msg;el.classList.toggle('error',error)}
-function renderEvent(e){const idx=entries.indexOf(e);return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span><div class="share-actions" aria-label="مشاركة هذا السجل"><button type="button" class="share-icon download-icon" data-share-action="download" data-event-id="${idx}" title="تحميل" aria-label="تحميل صورة الخبر 1080 في 1920"><span>تحميل</span></button><button type="button" class="share-icon" data-share-action="image" data-event-id="${idx}" title="مشاركة" aria-label="مشاركة صورة الخبر مع رابط الموقع"><span>مشاركة</span></button></div></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div></article>`}
+const DOWNLOAD_ARROW='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="blueArrow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e1fcff"/><stop offset=".32" stop-color="#82dcff"/><stop offset=".68" stop-color="#229ad9"/><stop offset="1" stop-color="#1363ac"/></linearGradient></defs><path d="M19 5h10v20h10L24 43 9 25h10Z" fill="url(#blueArrow)" stroke="#327fbb" stroke-width="1.3" stroke-linejoin="round"/><path d="M22 8h3v19" fill="none" stroke="#fff" stroke-width="2.3" opacity=".9" stroke-linecap="round"/></svg>';
+const SHARE_ARROW='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="greenArrow" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e1ffe9"/><stop offset=".32" stop-color="#83edaa"/><stop offset=".68" stop-color="#1ba56b"/><stop offset="1" stop-color="#09633e"/></linearGradient></defs><path d="M9 34Q10 20 29 20V10l13 14-13 13v-9Q17 25 9 34Z" fill="url(#greenArrow)" stroke="#16814f" stroke-width="1.5" stroke-linejoin="round"/><path d="M15 26Q22 20 31 23" fill="none" stroke="#fff" stroke-width="2" opacity=".8" stroke-linecap="round"/></svg>';
+function shareControls(kind,id){return `<div class="share-actions" aria-label="مشاركة وتحميل"><button type="button" class="arrow-action" data-share-action="download" data-${kind}-id="${id}" title="تحميل" aria-label="تحميل الصورة">${DOWNLOAD_ARROW}</button><button type="button" class="arrow-action" data-share-action="image" data-${kind}-id="${id}" title="مشاركة" aria-label="مشاركة الصورة">${SHARE_ARROW}</button></div>`}
+function renderEvent(e){const idx=entries.indexOf(e);return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div>${shareControls('event',idx)}</article>`}
 
 // رسم بطاقة عمودية بخلفية وملف مستقل دون الاعتماد على مكتبات خارجية
 let cachedLogoPromise;
@@ -244,17 +275,17 @@ async function makeStoryImage(e){
  else{ctx.fillStyle='#f8d38a';ctx.font='bold 88px "Traditional Arabic",Tahoma,Arial';ctx.fillText('أوائل البدائع',W/2,310)}
  ctx.fillStyle='#f3d7a2';ctx.font='bold 40px "Traditional Arabic",Tahoma,Arial';ctx.fillText('سجل أوائل وأحداث وأخبار البدائع',W/2,598);
  ctx.fillStyle='#fff8e9';ctx.shadowColor='#10081566';ctx.shadowBlur=35;roundRect(ctx,91,659,898,995,45);ctx.fill();ctx.shadowBlur=0;
- const colors={'أوائل':['#12734a','#e5fff0'],'خبر':['#b34548','#ffe5e3'],'حدث':['#b77b1c','#fff0b7']};const [badgeColor,badgeText]=colors[e.type]||colors['حدث'];
+ const colors={'أوائل':['#12734a','#e5fff0'],'خبر':['#b34548','#ffe5e3'],'حدث':['#b77b1c','#fff0b7'],'سؤال':['#8b5a3c','#fff1da']};const [badgeColor,badgeText]=colors[e.type]||colors['حدث'];
  ctx.fillStyle=badgeColor;roundRect(ctx,360,690,360,92,45);ctx.fill();ctx.fillStyle=badgeText;ctx.font='bold 53px "Traditional Arabic",Tahoma,Arial';ctx.fillText(e.type,W/2,737);
- const yearLabel=/^\d{3,4}/.test(e.year)?'سنة '+e.year:(e.year||'سنة غير محددة');
+ const yearLabel=e.type==='سؤال'?'هل تعرف الإجابة؟':(/^\d{3,4}/.test(e.year)?'سنة '+e.year:(e.year||'سنة غير محددة'));
  ctx.fillStyle='#946230';ctx.font='bold 56px "Traditional Arabic",Tahoma,Arial';ctx.fillText(yearLabel,W/2,854);
  ctx.strokeStyle='#e8cf9b';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(200,925);ctx.lineTo(880,925);ctx.stroke();
  let pos=drawWrapped(ctx,e.text,W/2,1020,775,66,9,'#28372d');
  let sourceY=Math.max(1410,pos.lastY+105);ctx.fillStyle='#7d6756';ctx.font='bold 34px "Traditional Arabic",Tahoma,Arial';
  const source=String(e.source||'').trim();if(source){const sr=drawWrapped(ctx,'المصدر: '+source,W/2,sourceY,785,36,3,'#6f5e50');sourceY=sr.lastY+65}
  if(e.domain){ctx.fillStyle='#947252';ctx.font='34px "Traditional Arabic",Tahoma,Arial';ctx.fillText(e.domain,W/2,Math.min(1590,sourceY))}
- ctx.fillStyle='#f8d89d';ctx.font='bold 49px "Traditional Arabic",Tahoma,Arial';ctx.fillText('المزيد من تاريخ البدائع',W/2,1740);
- ctx.direction='ltr';ctx.font='bold 33px Arial,sans-serif';ctx.fillStyle='#fff2d7';ctx.fillText(SITE_URL,W/2,1800);
+ ctx.fillStyle='#f8d89d';ctx.font='bold 49px "Traditional Arabic",Tahoma,Arial';ctx.fillText(e.type==='سؤال'?'شاركنا الإجابة عبر موقع أوائل البدائع':'أوائل البدائع — ذاكرة المكان',W/2,1740);
+ // لا يُطبع رابط الموقع داخل الصور، ويبقى رابطًا نصيًا عند المشاركة فقط.
  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('لم يتم إنشاء الصورة')),'image/png'));
 }
 function fileName(e){return 'awael-albadaie-'+String(e.year||'history').replace(/[^\w\u0600-\u06ff-]/g,'-')+'-'+(e.order??0)+'.png'}
@@ -274,7 +305,7 @@ async function shareEvent(action,e,btn){
   saveBlob(blob,name);alert('تم تنزيل الصورة. يمكنك رفعها إلى سناب شات أو تيك توك أو حالة واتساب، ومشاركة رابط الموقع معها.');
  }catch(err){console.error(err);alert('تعذر إنشاء الصورة. جرّب متصفح Chrome أو Safari بعد فتح الموقع من رابط GitHub Pages.')}finally{btn.disabled=false;btn.removeAttribute('aria-busy')}
 }
-document.addEventListener('click',e=>{const btn=e.target.closest('[data-share-action]');if(!btn)return;const item=entries[Number(btn.dataset.eventId)];if(item)shareEvent(btn.dataset.shareAction,item,btn)});
+document.addEventListener('click',e=>{const btn=e.target.closest('[data-share-action]');if(!btn)return;const item=btn.hasAttribute('data-question-id')?{type:'سؤال',year:'',text:questions[Number(btn.dataset.questionId)],source:'',domain:'',order:Number(btn.dataset.questionId)}:entries[Number(btn.dataset.eventId)];if(item&&item.text)shareEvent(btn.dataset.shareAction,item,btn)});
 
 function numericYear(y){return /^\d{3,4}(?:\s*(?:هـ|ه|H|م))?$/i.test(normalize(y))}
 function setTimelineEnd(){
@@ -302,7 +333,7 @@ function render(){
 }
 window.addEventListener('resize',setTimelineEnd);
 function renderQuestions(){
- document.getElementById('question-list').innerHTML=questions.map((x,i)=>`<article class="q-card"><div class="q-head">سؤال ${i+1}</div><p>${esc(x)}</p><a class="answer" href="${FORM}" target="_blank" rel="noopener">اضغط إذا كان لديك جواب ↗</a></article>`).join('');
+ document.getElementById('question-list').innerHTML=questions.map((x,i)=>`<article class="q-card"><div class="q-head">سؤال ${i+1}</div><p>${esc(x)}</p><a class="answer" href="${FORM}" target="_blank" rel="noopener">اضغط إذا كان لديك جواب ↗</a>${shareControls('question',i)}</article>`).join('');
  const ticker=document.getElementById('ticker-track');
  ticker.style.setProperty('--ticker-duration',Math.max(22,questions.length*8)+'s');
  ticker.innerHTML=questions.map((x,i)=>`<a class="ticker-question" href="${FORM}" target="_blank" rel="noopener" title="اضغط للإجابة على السؤال">◈ ${esc(x)} <span>اضغط للإجابة</span></a>`).join('');
