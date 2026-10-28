@@ -117,6 +117,15 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
 }
 @media(max-width:350px){.filters{gap:3px}.filters .filter,.filters .submit-filter{width:calc((100vw - 47px)/5);font-size:.79rem}.filters .submit-filter{font-size:.71rem}}
 @media(prefers-reduced-motion:reduce){.ticker-viewport{direction:rtl;overflow-x:auto}.ticker-track{animation:none;transform:none;padding:0 15px}}
+
+/* أدوات النشر أسفل كل سجل */
+.share-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:15px;padding-top:13px;border-top:1px solid #eee8da}
+.share-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:6px 15px;border-radius:25px;border:1px solid #d3b980;font-family:inherit;font-size:1.03rem;font-weight:800;cursor:pointer;text-decoration:none;color:#52391c;background:linear-gradient(170deg,#fff9df,#e8c78a 75%,#bb9253);box-shadow:inset 0 2px 2px #fff8,0 3px 0 #b9975a,0 5px 9px #392b1620;transition:filter .15s,transform .15s}
+.share-btn:hover{filter:brightness(1.05);transform:translateY(-1px)}.share-btn:active{transform:translateY(2px)}
+.share-btn.wa{background:linear-gradient(150deg,#e1ffe9,#6fc493 75%,#26784a);border-color:#45986b;color:#12452c;box-shadow:inset 0 2px 2px #fff8,0 3px 0 #2d7e52,0 5px 9px #392b1620}
+.share-btn.native{background:linear-gradient(160deg,#fff0e0,#dba7a0 77%,#a76768);border-color:#ba8581;color:#542c38;box-shadow:inset 0 2px 2px #fff8,0 3px 0 #a66b6a,0 5px 9px #392b1620}
+.share-btn:disabled{opacity:.55;cursor:wait}.share-note{display:block;font-size:.83rem;color:#786d5a;margin-top:9px}
+@media(max-width:650px){.share-actions{gap:6px}.share-btn{font-size:.85rem;padding:6px 10px;min-height:36px}}
 </style>
 </head>
 <body>
@@ -128,6 +137,7 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
 const SHEET_ID='18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ';
 const PUBLIC_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQiAW_nETVzndX2pwnfdYluShqDTxqLG8HcLw56WsTGhrCPGtW2Fcjxg7thCAWLHVEKDRANpjL82Rr1/pub?output=csv';
 const FORM='https://forms.gle/dhR2bhcbQPg9Yvyt9';
+const SITE_URL=(location.protocol==='https:'||location.protocol==='http:')?location.origin+location.pathname:'https://buout.github.io/albdayee/';
 const EVENTS_FALLBACK=[
  ['1295','أول مزرعة أُنشئت في البدائع: مزرعة العمورية.','خبر','خدمات أهلية','كتاب البدائع، عبدالله بن محمد العبيد'],
  ['1378','افتتاح معهد إعداد المعلمين، ومديره كان محمد بن الروبان.','أوائل','قطاعات حكومية ومنشآت','مقال م/عبدالعزيز السحيباني | صحيفة الجزيرة'],
@@ -153,7 +163,83 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function mapEvents(rows){const header=rows[0]?.map(normalize)||[];const hasHeader=header.some(x=>['الموافقة','العام','الخبر','النوع'].includes(x));return rows.slice(hasHeader?1:0).filter(r=>check(r[0])&&normalize(r[3])).map((r,i)=>({year:year(r[1]),text:normalize(r[3]),type:kind(r[2]),domain:normalize(r[4]),source:normalize(r[5]),order:i})).filter(x=>x.year)}
 function safeSort(a,b){return (parseInt(a.year,10)||0)-(parseInt(b.year,10)||0)||a.order-b.order}
 function setStatus(msg,error=false){const el=document.getElementById('status');el.textContent=msg;el.classList.toggle('error',error)}
-function renderEvent(e){return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div></article>`}
+function renderEvent(e){const idx=entries.indexOf(e);return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div><div class="share-actions" aria-label="مشاركة هذا السجل"><button type="button" class="share-btn wa" data-share-action="whatsapp" data-event-id="${idx}">◉ مشاركة واتساب</button><button type="button" class="share-btn" data-share-action="download" data-event-id="${idx}">⬇ تحميل صورة 1080×1920</button><button type="button" class="share-btn native" data-share-action="image" data-event-id="${idx}">⇧ مشاركة الصورة</button></div></article>`}
+
+// رسم بطاقة عمودية بخلفية وملف مستقل دون الاعتماد على مكتبات خارجية
+let cachedLogoPromise;
+function loadLogo(){
+ if(!cachedLogoPromise)cachedLogoPromise=new Promise((resolve)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>resolve(null);img.src='logo.png'});
+ return cachedLogoPromise;
+}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function measureLines(ctx,text,maxWidth){
+ const lines=[];let line='';
+ // التقسيم يراعي الكلمات العربية ويفصل الكلمة الطويلة عند الضرورة
+ for(const word of String(text||'').split(/\s+/)){
+  if(!word)continue;
+  const test=line?line+' '+word:word;
+  if(ctx.measureText(test).width<=maxWidth){line=test;continue}
+  if(line){lines.push(line);line=''}
+  if(ctx.measureText(word).width<=maxWidth){line=word;continue}
+  let part='';for(const c of word){if(ctx.measureText(part+c).width>maxWidth&&part){lines.push(part);part=c}else part+=c}line=part;
+ }
+ if(line)lines.push(line);return lines;
+}
+function fitLines(ctx,text,maxWidth,maxLines,startSize,minSize){
+ let lines=[];let size=startSize;
+ for(;size>=minSize;size-=2){ctx.font=`bold ${size}px "Traditional Arabic", Tahoma, Arial, sans-serif`;lines=measureLines(ctx,text,maxWidth);if(lines.length<=maxLines)break}
+ ctx.font=`bold ${size}px "Traditional Arabic", Tahoma, Arial, sans-serif`;
+ if(lines.length>maxLines){lines=lines.slice(0,maxLines);let last=lines[maxLines-1];while(ctx.measureText(last+'…').width>maxWidth&&last.length)last=last.slice(0,-1);lines[maxLines-1]=last+'…'}
+ return {lines,size};
+}
+function drawWrapped(ctx,text,x,y,maxWidth,fontSize,maxLines,color){
+ const {lines,size}=fitLines(ctx,text,maxWidth,maxLines,fontSize,27);
+ ctx.fillStyle=color;const lh=size*1.65;lines.forEach((line,i)=>ctx.fillText(line,x,y+i*lh));
+ return {lastY:y+(lines.length-1)*lh,lines:lines.length,size};
+}
+async function makeStoryImage(e){
+ const W=1080,H=1920,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
+ const ctx=canvas.getContext('2d');ctx.textAlign='center';ctx.textBaseline='middle';ctx.direction='rtl';
+ let gradient=ctx.createLinearGradient(0,0,0,H);gradient.addColorStop(0,'#2c132c');gradient.addColorStop(.30,'#682a48');gradient.addColorStop(.62,'#c47b43');gradient.addColorStop(1,'#291b22');ctx.fillStyle=gradient;ctx.fillRect(0,0,W,H);
+ // زخارف خطوط ذهبية مستوحاة من ألوان رأس الصفحة
+ ctx.strokeStyle='#efc675';ctx.lineWidth=7;roundRect(ctx,38,38,1004,1844,46);ctx.stroke();ctx.strokeStyle='#e0aa5b77';ctx.lineWidth=2;roundRect(ctx,56,56,968,1808,32);ctx.stroke();
+ const logo=await loadLogo();
+ if(logo){ctx.save();ctx.beginPath();ctx.arc(W/2,322,230,0,Math.PI*2);ctx.clip();ctx.drawImage(logo,W/2-230,92,460,460);ctx.restore()}
+ else{ctx.fillStyle='#f8d38a';ctx.font='bold 88px "Traditional Arabic",Tahoma,Arial';ctx.fillText('أوائل البدائع',W/2,310)}
+ ctx.fillStyle='#f3d7a2';ctx.font='bold 40px "Traditional Arabic",Tahoma,Arial';ctx.fillText('سجل أوائل وأحداث وأخبار البدائع',W/2,598);
+ ctx.fillStyle='#fff8e9';ctx.shadowColor='#10081566';ctx.shadowBlur=35;roundRect(ctx,91,659,898,995,45);ctx.fill();ctx.shadowBlur=0;
+ const colors={'أوائل':['#12734a','#e5fff0'],'خبر':['#b34548','#ffe5e3'],'حدث':['#b77b1c','#fff0b7']};const [badgeColor,badgeText]=colors[e.type]||colors['حدث'];
+ ctx.fillStyle=badgeColor;roundRect(ctx,360,690,360,92,45);ctx.fill();ctx.fillStyle=badgeText;ctx.font='bold 53px "Traditional Arabic",Tahoma,Arial';ctx.fillText(e.type,W/2,737);
+ const yearLabel=/^\d{3,4}/.test(e.year)?'سنة '+e.year:(e.year||'سنة غير محددة');
+ ctx.fillStyle='#946230';ctx.font='bold 56px "Traditional Arabic",Tahoma,Arial';ctx.fillText(yearLabel,W/2,854);
+ ctx.strokeStyle='#e8cf9b';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(200,925);ctx.lineTo(880,925);ctx.stroke();
+ let pos=drawWrapped(ctx,e.text,W/2,1020,775,66,9,'#28372d');
+ let sourceY=Math.max(1410,pos.lastY+105);ctx.fillStyle='#7d6756';ctx.font='bold 34px "Traditional Arabic",Tahoma,Arial';
+ const source=String(e.source||'').trim();if(source){const sr=drawWrapped(ctx,'المصدر: '+source,W/2,sourceY,785,36,3,'#6f5e50');sourceY=sr.lastY+65}
+ if(e.domain){ctx.fillStyle='#947252';ctx.font='34px "Traditional Arabic",Tahoma,Arial';ctx.fillText(e.domain,W/2,Math.min(1590,sourceY))}
+ ctx.fillStyle='#f8d89d';ctx.font='bold 49px "Traditional Arabic",Tahoma,Arial';ctx.fillText('المزيد من تاريخ البدائع',W/2,1740);
+ ctx.direction='ltr';ctx.font='bold 33px Arial,sans-serif';ctx.fillStyle='#fff2d7';ctx.fillText(SITE_URL,W/2,1800);
+ return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(Error('لم يتم إنشاء الصورة')),'image/png'));
+}
+function fileName(e){return 'awael-albadaie-'+String(e.year||'history').replace(/[^\w\u0600-\u06ff-]/g,'-')+'-'+(e.order??0)+'.png'}
+function saveBlob(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
+function whatsappText(e){return `*${e.type} من تاريخ البدائع*\n${e.year||'غير محدد'}\n\n${e.text}${e.source?'\n\nالمصدر: '+e.source:''}\n\nالمزيد من الأخبار والأحداث التاريخية:\n${SITE_URL}`}
+async function shareEvent(action,e,btn){
+ if(action==='whatsapp'){window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(whatsappText(e)),'_blank','noopener,noreferrer');return}
+ btn.disabled=true;const old=btn.textContent;btn.textContent='جارٍ تجهيز الصورة…';
+ try{
+  const blob=await makeStoryImage(e),name=fileName(e);
+  if(action==='download'){saveBlob(blob,name);return}
+  const file=new File([blob],name,{type:'image/png'});
+  if(navigator.canShare?.({files:[file]})&&navigator.share){
+   try{await navigator.share({files:[file],title:'أوائل البدائع',text:whatsappText(e)});return}
+   catch(err){if(err.name==='AbortError')return;console.warn(err)}
+  }
+  saveBlob(blob,name);alert('تم تنزيل الصورة. يمكنك رفعها إلى سناب شات أو تيك توك أو حالة واتساب، ومشاركة رابط الموقع معها.');
+ }catch(err){console.error(err);alert('تعذر إنشاء الصورة. جرّب متصفح Chrome أو Safari بعد فتح الموقع من رابط GitHub Pages.')}finally{btn.disabled=false;btn.textContent=old}
+}
+document.addEventListener('click',e=>{const btn=e.target.closest('[data-share-action]');if(!btn)return;const item=entries[Number(btn.dataset.eventId)];if(item)shareEvent(btn.dataset.shareAction,item,btn)});
+
 function numericYear(y){return /^\d{3,4}(?:\s*(?:هـ|ه|H|م))?$/i.test(normalize(y))}
 function setTimelineEnd(){
  const root=document.getElementById('timeline');const last=root.querySelector('.year-block:last-child .event:last-child');
