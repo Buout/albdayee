@@ -200,40 +200,6 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
 </style>
 
 <style>
-/* معرض صورة وتاريخ — صور 9:16 وشريط يتحرك من اليمين إلى اليسار */
-.gallery-section{margin:25px 0 26px;padding:18px 0 10px;overflow:hidden}
-.gallery-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
-.gallery-heading h2{font-size:clamp(1.75rem,3vw,2.4rem);margin:0;color:#26392c;text-shadow:0 2px 1px #fff}
-.gallery-heading p{color:#738078;margin:0;font-size:1.05rem}
-.gallery-count{color:#956e37;font-size:1rem}
-.gallery-stage{overflow:hidden;position:relative;border-radius:18px;min-height:95px}
-.gallery-stage:before,.gallery-stage:after{content:"";position:absolute;top:0;bottom:0;width:24px;z-index:2;pointer-events:none}
-.gallery-stage:before{right:0;background:linear-gradient(to left,#f6f5ef,transparent)}
-.gallery-stage:after{left:0;background:linear-gradient(to right,#f6f5ef,transparent)}
-.gallery-rail{display:flex;width:max-content;direction:ltr;animation:gallery-move var(--gallery-speed,45s) linear infinite;will-change:transform}
-.gallery-stage:hover .gallery-rail,.gallery-stage:focus-within .gallery-rail,.gallery-stage.is-paused .gallery-rail{animation-play-state:paused}
-.gallery-set{display:flex;gap:16px;padding-inline-end:16px}
-.gallery-card{display:flex;flex-direction:column;flex:0 0 auto;width:clamp(175px,22vw,230px);direction:rtl;background:#fff;border:1px solid #e5e1d8;border-radius:16px;box-shadow:0 5px 16px #2b31201a;overflow:hidden;text-decoration:none}
-.gallery-card:focus-visible{outline:3px solid #c69536;outline-offset:-3px}
-.gallery-photo{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:linear-gradient(140deg,#eed5a0,#644767)}
-.gallery-caption{padding:11px 12px 13px;min-height:87px;color:#283e32}
-.gallery-caption strong{display:block;font-size:1.04rem;line-height:1.35}
-.gallery-date{display:block;font-size:.91rem;color:#a17235;margin-top:3px}
-.gallery-message{margin:0;padding:15px;border:1px solid #e3dac7;border-radius:15px;background:#fffaf1;color:#765f3f}
-.gallery-hint{margin-top:6px;color:#7e7568;font-size:.83rem}
-@keyframes gallery-move{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(max-width:650px){
- .gallery-section{margin:16px 0 20px;padding:10px 0}
- .gallery-set{gap:10px;padding-inline-end:10px}
- .gallery-card{width:166px;border-radius:13px}
- .gallery-caption{min-height:79px;padding:8px 9px}
- .gallery-caption strong{font-size:.91rem}
- .gallery-heading h2{font-size:1.75rem}
-}
-@media(prefers-reduced-motion:reduce){.gallery-rail{animation:none}}
-</style>
-
-<style>
 /* الخدمات وروابط التواصل - مستوحاة من ألوان شعار البدائع */
 :root{--heritage-burgundy:#51233f;--heritage-gold:#deaf58}
 .top-hub{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin:18px 0 12px}
@@ -249,7 +215,7 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
 .hub-links{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}
 .hub-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 19px;min-width:135px;border-radius:30px;text-decoration:none;font-size:1.25rem;font-weight:900;background:linear-gradient(155deg,#fff5d6,#ddb15e 55%,#bb8744);color:#42292b;border:1px solid #d6a34d;box-shadow:inset 0 3px 6px #fff9,inset 0 -4px 4px #75441444,0 4px 5px #5330202f;transition:transform .2s,filter .2s}
 .hub-link:focus-visible,.social-bubble:focus-visible{outline:3px solid #c58738;outline-offset:3px}
-.question-inquiry{display:inline-flex!important;justify-content:center;align-items:center;text-decoration:none;color:#743f77;font-family:Georgia,serif;font-weight:900;font-size:27px!important;line-height:1!important;filter:drop-shadow(0 2px 2px #b8a3c0)}
+.question-inquiry{display:inline-flex!important;justify-content:center;align-items:center;text-decoration:none;color:#743f77;font-family:"Traditional Arabic","Amiri",serif;font-weight:900;font-size:27px!important;line-height:1!important;filter:drop-shadow(0 2px 2px #b8a3c0)}
 .question-inquiry:hover{transform:translateY(-2px) scale(1.09)}
 .q-card .question-inquiry{font-size:25px!important}
 @media(max-width:650px){.top-hub{margin:12px 0 8px}.social-strip{gap:9px}.social-bubble{width:69px;min-height:64px;border-radius:18px}.social-bubble span{font-size:25px}.social-bubble small{font-size:12px}.hub-links{gap:6px;flex-wrap:nowrap}.hub-link{min-width:0;flex:1;white-space:nowrap;padding:7px 4px;font-size:16px;line-height:1.25}.question-inquiry{font-size:24px!important}}
@@ -275,15 +241,12 @@ body{font-family:'Traditional Arabic','Amiri',Tahoma,serif;font-size:20px}
    <a class="social-bubble snapchat" href="https://snapchat.com/t/Xos1svDh" target="_blank" rel="noopener noreferrer" title="سناب شات" aria-label="حساب سناب شات"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.18-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z" fill="white" stroke="black" stroke-width=".7" stroke-linejoin="round"/></svg></a>
   </div>
   <div class="hub-links" aria-label="خرائط ومؤلفات ومشاركة">
-    <a class="hub-link" id="maps-hub-link" href="maps.html"><span aria-hidden="true">◈</span> خرائط البدائع</a>
-    <a class="hub-link" href="books.html"><span aria-hidden="true">▤</span> مؤلفات</a>
+    <a class="hub-link" id="maps-hub-link" href="maps.html" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">◈</span> خرائط البدائع</a>
+    <a class="hub-link" href="books.html" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▤</span> مؤلفات</a>
     <a class="hub-link" href="https://forms.gle/Yb9p46b7pfh4DeHR9" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">✎</span> شاركنا</a>
   </div>
 </nav>
-<section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الأحداث</button><button class="filter" data-filter="خبر">الأخبار</button><a class="submit-filter" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener" aria-label="أرسل معلومة عبر النموذج">✉ أرسل معلومة</a></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><section class="gallery-section" id="history-gallery" aria-labelledby="gallery-heading">
-  <div class="gallery-heading"><div><h2 id="gallery-heading">صورة وتاريخ</h2><p>صور من ذاكرة البدائع مع تاريخ كل صورة ووصفها</p></div><span class="gallery-count" id="gallery-count"></span></div>
-  <div id="gallery-stage" class="gallery-stage" aria-live="polite"><p class="gallery-message">جارٍ تحميل الصور التاريخية…</p></div>
-</section><section class="question-ticker" aria-label="الأسئلة التي تنتظر إجاباتكم"><span class="ticker-title">أسئلة الأهالي</span><div class="ticker-viewport"><div class="ticker-track" id="ticker-track"><span class="ticker-loading">جارٍ تحميل الأسئلة…</span></div></div></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>هل تعرف سنة وقوع أحد هذه الأحداث؟ ساعد في توثيق تاريخ البدائع.</p><a class="undated-cta" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">📅 لدي معلومة عن سنة حدث — أرسلها</a><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
+<section class="toolbar" aria-label="بحث وتصفية"><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="أوائل">الأوائل</button><button class="filter" data-filter="حدث">الأحداث</button><button class="filter" data-filter="خبر">الأخبار</button></div><input id="search" class="search" placeholder="⌕ ابحث عن حدث أو سنة أو مصدر..." aria-label="بحث"></section><section class="question-ticker" aria-label="الأسئلة التي تنتظر إجاباتكم"><span class="ticker-title">أسئلة الأهالي</span><div class="ticker-viewport"><div class="ticker-track" id="ticker-track"><span class="ticker-loading">جارٍ تحميل الأسئلة…</span></div></div></section><div class="intro"><h2>الخط الزمني لتاريخ البدائع</h2><div id="status" class="status" aria-live="polite">جارٍ تحميل البيانات <span class="loading-dot">●</span></div></div><section id="timeline" class="timeline" aria-label="الأحداث عبر السنوات"></section><section id="undated-section" class="undated-section" hidden><h2>أحداث غير مؤرخة بسنة محددة</h2><p>هل تعرف سنة وقوع أحد هذه الأحداث؟ ساعد في توثيق تاريخ البدائع.</p><a class="undated-cta" href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">📅 لدي معلومة عن سنة حدث — أرسلها</a><div id="undated-list"></div></section><section class="questions-section" id="questions"><div class="questions-header"><div><h2 class="questions-title">أسئلة تنتظر إجاباتكم</h2><p>ساهم في توثيق تاريخ البدائع بإجابة أحد الأسئلة التالية.</p></div><a href="https://docs.google.com/spreadsheets/d/18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ/edit?gid=18007375#gid=18007375" target="_blank" rel="noopener" class="answer">عرض ورقة الأسئلة ↗</a></div><div id="question-status" class="status" aria-live="polite"></div><div class="q-list" id="question-list"></div></section></main>
 <footer><div class="wrap">أوائل البدائع — سجل توثيقي يعتمد على المصادر والمعلومات الموافق على نشرها. <a href="https://forms.gle/dhR2bhcbQPg9Yvyt9" target="_blank" rel="noopener">شارك بمعلومة</a></div></footer>
 <script>
 'use strict';
@@ -322,7 +285,7 @@ const SHARE_ARROW='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGrad
 const BOOK_ICON='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="bookGold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff7cf"/><stop offset=".45" stop-color="#dcb96d"/><stop offset="1" stop-color="#96713b"/></linearGradient></defs><path d="M24 10C18 6 11 7 5 9v28c7-2 14-1 19 3 5-4 12-5 19-3V9c-6-2-13-3-19 1Z" fill="url(#bookGold)" stroke="#83612c" stroke-width="2" stroke-linejoin="round"/><path d="M24 10v30M9 15c5-1 9-1 12 2M27 17c3-3 7-3 12-2M9 22c4-1 8 0 12 2M27 24c4-2 8-3 12-2" stroke="#fff9df" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
 function bookAttachment(e){return e.attachment?`<a class="arrow-action book-attachment" href="${esc(e.attachment)}" target="_blank" rel="noopener noreferrer" title="مرفق" aria-label="فتح المرفق الخارجي">${BOOK_ICON}</a>`:''}
 const INQUIRY_FORM='https://forms.gle/B8HkA21Jt5cjevSp8';
-function inquiryIcon(e){const copied=JSON.stringify([e.year,e.text,e.source].filter(Boolean).join(' | '));return `<button type="button" class="arrow-action question-inquiry" title="اسأل أو استفسر" aria-label="اسأل أو استفسر" data-inquire="${esc(copied)}">?</button>`}
+function inquiryIcon(e){const copied=JSON.stringify([e.year,e.text,e.source].filter(Boolean).join(' | '));return `<button type="button" class="arrow-action question-inquiry" title="اسأل أو استفسر" aria-label="اسأل أو استفسر" data-inquire="${esc(copied)}">؟</button>`}
 function shareControls(kind,id){return `<div class="share-actions" aria-label="مشاركة وتحميل"><button type="button" class="arrow-action" data-share-action="download" data-${kind}-id="${id}" title="تحميل" aria-label="تحميل الصورة">${DOWNLOAD_ARROW}</button><button type="button" class="arrow-action" data-share-action="image" data-${kind}-id="${id}" title="مشاركة" aria-label="مشاركة الصورة">${SHARE_ARROW}</button></div>`}
 function renderEvent(e){const idx=entries.indexOf(e);return `<article class="event"><div class="event-head"><span class="orb ${e.type==='أوائل'?'first':e.type==='خبر'?'news':'event-type'}" aria-label="${esc(e.type)}">${esc(e.type)}</span></div><p class="event-text">${esc(e.text)}</p><div class="event-foot">${e.domain?`<span>◈ ${esc(e.domain)}</span>`:''}${e.source?`<span>☷ المصدر: ${esc(e.source)}</span>`:''}</div>${shareControls('event',idx).replace('</div>',bookAttachment(e)+inquiryIcon(e)+'</div>')}</article>`}
 
@@ -462,73 +425,4 @@ async function loadEvents(){try{entries=await tryURLs([PUBLIC_CSV,`https://docs.
 async function loadQuestions(){const status=document.getElementById('question-status');try{questions=await tryURLs([`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=18007375`,`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=18007375`],rows=>{const header=rows[0]?.map(normalize)||[];const start=header.some(x=>x.includes('السؤال')||x.includes('الموافقة'))?1:0;return rows.slice(start).filter(r=>check(r[0])&&normalize(r[1])).map(r=>normalize(r[1]))});status.textContent=`${questions.length} سؤال منشور`}catch(e){questions=QUESTIONS_FALLBACK;status.textContent='تعذر الوصول المباشر لورقة الأسئلة؛ المعروض أمثلة من الصورة المرفقة.';status.classList.add('error')}renderQuestions()}
 document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('button[data-filter]');if(!b)return;currentFilter=b.dataset.filter;document.querySelectorAll('.filter').forEach(el=>{el.classList.toggle('active',el===b);el.setAttribute('aria-pressed',String(el===b))});render()});document.getElementById('search').addEventListener('input',e=>{q=normalize(e.target.value);render()});document.querySelectorAll('.filter').forEach(el=>el.setAttribute('aria-pressed',String(el.classList.contains('active'))));loadEvents();loadQuestions();
 
-// أضف الصور إلى ورقة "صور" في Google Sheets أو إلى gallery.csv في المستودع.
-// الأعمدة: الموافقة، رابط الصورة، الوصف، التاريخ، رابط المصدر (اختياري).
-const GALLERY_SHEET_NAME='صور';
-const GALLERY_CSV_URL=''; // يمكن وضع رابط CSV المنشور الخاص بورقة الصور هنا.
-function getDriveImageLink(raw){
- const val=safeExternalUrl(raw);
- if(!val)return '';
- try{
-  const u=new URL(val);
-  if(u.hostname==='drive.google.com'||u.hostname==='www.drive.google.com'){
-    let id=(u.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)||[])[1]||u.searchParams.get('id');
-    if(!id)return '';
-    return 'https://drive.google.com/thumbnail?id='+encodeURIComponent(id)+'&sz=w1200';
-  }
-  return val;
- }catch{return ''}
-}
-function galleryRows(rows){
- const header=(rows[0]||[]).map(x=>normalize(x).toLowerCase());
- const hasHeader=header.some(x=>x.includes('رابط')||x.includes('صورة')||x.includes('الموافقة'));
- const approvalColumn=header.some(x=>x.includes('الموافقة'));
- return rows.slice(hasHeader?1:0).map((r,i)=>{
-   const offset=(!hasHeader||approvalColumn)?0:-1;
-   return {image:getDriveImageLink(r[1+offset]),caption:normalize(r[2+offset]),date:normalize(r[3+offset]),link:safeExternalUrl(r[4+offset]),approved:offset===-1||check(r[0]),order:i};
- }).filter(x=>x.approved&&x.image&&x.caption);
-}
-function shuffleGallery(items){
- const copy=items.slice();
- for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]]}
- return copy;
-}
-function galleryCard(item){
- const details=`<img class="gallery-photo" src="${esc(item.image)}" alt="${esc(item.caption)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.gallery-card').classList.add('gallery-image-error');this.alt='تعذر عرض الصورة؛ تحقق من مشاركة الصورة في Google Drive'"><div class="gallery-caption"><strong>${esc(item.caption)}</strong>${item.date?`<span class="gallery-date">${esc(item.date)}</span>`:''}</div>`;
- return item.link?`<a class="gallery-card" href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${details}</a>`:`<article class="gallery-card">${details}</article>`;
-}
-async function loadGallery(){
- const stage=document.getElementById('gallery-stage');
- const urls=[
-  ...(GALLERY_CSV_URL?[GALLERY_CSV_URL]:[]),
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(GALLERY_SHEET_NAME)}`,
-  './gallery.csv'
- ];
- let gallery=[];
- try{gallery=await tryURLs(urls,galleryRows)}catch(e){
-  stage.innerHTML='<p class="gallery-message">لم تُضف صور للمعرض بعد. أضف روابط صور Google Drive وأوصافها وتواريخها إلى ورقة «صور» أو ملف gallery.csv.</p>';
-  return;
- }
- const items=shuffleGallery(gallery);
- document.getElementById('gallery-count').textContent=items.length+' صورة';
- // نكرر المجموعة مرتين لتنفيذ حركة دائرية مستمرة دون فجوة.
- const one=items.map(galleryCard).join('');
- stage.innerHTML=`<div class="gallery-rail" style="--gallery-speed:${Math.max(25,items.length*7)}s"><div class="gallery-set">${one}</div><div class="gallery-set" aria-hidden="true">${one}</div></div>`;
- stage.addEventListener('touchstart',()=>stage.classList.add('is-paused'),{passive:true});
- stage.addEventListener('touchend',()=>stage.classList.remove('is-paused'),{passive:true});
-}
-loadGallery();
-
-const MAPS_GID='636607894';
-const DEFAULT_MAP='https://www.google.com/maps/d/viewer?mid=1Nd7Lm6tPtnhbHgiqjBR6sREsIKcnO8o';
-const MAPS_CSV=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${MAPS_GID}`;
-async function loadMapQuick(){
- try{const rows=await readCSV(MAPS_CSV);const maps=rows.slice(1).map(r=>r.map(safeExternalUrl).find(Boolean)).filter(Boolean);return [...new Set(maps)]}catch{return []}
-}
-document.getElementById('maps-hub-link')?.addEventListener('click',async e=>{
- e.preventDefault();const a=e.currentTarget;const w=window.open('about:blank','_blank');
- const links=await loadMapQuick();
- const chosen=links.length===1?links[0]:(links.length===0?DEFAULT_MAP:'maps.html');
- if(w){w.location.href=chosen}else window.location.href=chosen;
-});
 </script></body></html>

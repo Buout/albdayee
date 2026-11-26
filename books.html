@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="مؤلفات وكتب عن البدائع ومؤلفوها">
+<title>مؤلفات البدائع | أوائل البدائع</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#293f33;--brown:#552944;--gold:#d3aa63;--bg:#f6f4ee}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"Traditional Arabic","Amiri",serif;font-size:21px;line-height:1.7;margin:0}
+header{background:#351c35}header img{display:block;width:100%;max-height:340px;object-fit:cover}
+main{max-width:1050px;margin:auto;padding:24px 18px 65px}
+.back{display:inline-flex;align-items:center;text-decoration:none;border-radius:30px;background:linear-gradient(#fae4af,#caa055);color:#51381c;font-weight:bold;padding:6px 23px;box-shadow:0 3px 0 #9c783e}
+h1{margin:26px 0 0;color:var(--brown);font-size:2.2rem}
+.intro{color:#777065;margin:0 0 20px}
+.state{background:#fff9e9;border:1px solid #e6d6aa;padding:10px 15px;border-radius:12px;margin:0 0 16px}
+.state.error{color:#a43230}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:17px}
+.card{border:1px solid #eadfce;background:#fff;border-radius:18px;padding:20px;box-shadow:0 6px 17px #34251a12}
+.card h2{font-size:1.5rem;color:#422c40;margin:0 0 10px;line-height:1.4}
+.author{font-size:1.1rem;margin:0 0 14px;color:#516458}
+.book-link{display:inline-block;border-radius:24px;background:#23684d;color:#fff;padding:4px 18px;text-decoration:none}
+.book-link:focus-visible,.back:focus-visible{outline:3px solid #e9ba6c;outline-offset:3px}
+.hint{font-size:.95rem;color:#736b63;margin-top:25px}
+@media(max-width:650px){body{font-size:19px}main{padding:16px 15px 40px}.cards{grid-template-columns:1fr}header img{max-height:190px}}
+</style>
+</head>
+<body>
+<header><img src="header.png" alt="أوائل البدائع" onerror="this.style.display='none';this.parentElement.style.minHeight='45px'"></header>
+<main>
+<a class="back" href="./index.html">↩ العودة إلى الرئيسية</a>
+<h1>مؤلفات البدائع</h1>
+<p class="intro">كتب ومؤلفات تتناول البدائع، تُعرض مباشرة من ورقة Google Sheets.</p>
+<div id="status" class="state" role="status" aria-live="polite">جارٍ تحميل المؤلفات…</div>
+<section class="cards" id="cards" aria-label="قائمة المؤلفات"></section>
+<p class="hint">يتم جلب المؤلفات من الأعمدة: A اسم المؤلف، B اسم الكتاب، C رابط الكتاب. تُضاف الكتب الجديدة تلقائيًا عند ظهورها في الورقة المتاحة للنشر.</p>
+</main>
+<script>
+'use strict';
+const SHEET='18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ';
+const BOOK_GID='1282309084';
+const PUBLISHED_BASE='https://docs.google.com/spreadsheets/d/e/2PACX-1vQiAW_nETVzndX2pwnfdYluShqDTxqLG8HcLw56WsTGhrCPGtW2Fcjxg7thCAWLHVEKDRANpjL82Rr1/pub';
+const CSV_URLS=[
+  `${PUBLISHED_BASE}?gid=${BOOK_GID}&single=true&output=csv`,
+  `https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:csv&gid=${BOOK_GID}`,
+  `https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv&gid=${BOOK_GID}`
+];
+function parseCSV(str){
+ str=str.replace(/^\uFEFF/,'');const rows=[];let row=[],cell='',quoted=false;
+ for(let i=0;i<str.length;i++){
+  const c=str[i];
+  if(c==='"'){
+   if(quoted&&str[i+1]==='"'){cell+='"';i++}else quoted=!quoted;
+  }else if(c===','&&!quoted){row.push(cell);cell=''}
+  else if((c==='\r'||c==='\n')&&!quoted){
+   if(c==='\r'&&str[i+1]==='\n')i++;
+   row.push(cell);if(row.some(x=>x.trim()))rows.push(row);row=[];cell='';
+  }else cell+=c;
+ }
+ row.push(cell);if(row.some(x=>x.trim()))rows.push(row);
+ return rows;
+}
+function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function safeURL(s){try{const u=new URL(String(s||'').trim());return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
+function approved(s){return ['true','1','yes','نعم','صح','✓','✔','☑','✅'].includes(String(s||'').trim().toLowerCase())}
+function mapBooks(rows){
+ const heads=(rows[0]||[]).map(s=>String(s).trim());
+ const header=heads.some(s=>s.includes('المؤلف')||s.includes('الكتاب'));
+ const hIndex=(words,fallback)=>{let n=heads.findIndex(v=>words.some(w=>v.includes(w)));return n>=0?n:fallback}
+ const authorI=header?hIndex(['اسم المؤلف','المؤلف','الكاتب'],0):0;
+ const bookI=header?hIndex(['اسم الكتاب','عنوان الكتاب','الكتاب'],1):1;
+ const linkI=header?hIndex(['رابط الكتاب','الرابط','رابط'],2):2;
+ const approvalI=header?hIndex(['الموافقة','نشر'], -1):-1;
+ return rows.slice(header?1:0)
+  .filter(row=>approvalI<0||approved(row[approvalI]))
+  .map(row=>({author:String(row[authorI]||'').trim(),book:String(row[bookI]||'').trim(),link:safeURL(row[linkI])}))
+  .filter(x=>x.book);
+}
+async function readURL(url){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),12000);
+ try{
+  const r=await fetch(url,{signal:controller.signal,cache:'no-store'});
+  if(!r.ok)throw Error(`HTTP ${r.status}`);
+  const raw=await r.text();
+  if(/^\s*<!doctype html|^\s*<html/i.test(raw))throw Error('الورقة ليست متاحة بصيغة CSV');
+  return parseCSV(raw);
+ }finally{clearTimeout(timer)}
+}
+// Google Visualization JSONP doesn't require browser cross-origin fetch permission.
+function readVisualization(){
+ return new Promise((resolve,reject)=>{
+  const name='awaelBooksResponse_'+Math.random().toString(36).slice(2);
+  const script=document.createElement('script');
+  let finished=false;
+  const clean=()=>{clearTimeout(timer);script.remove();try{delete window[name]}catch{window[name]=undefined}};
+  const fail=e=>{if(finished)return;finished=true;clean();reject(e)};
+  window[name]=response=>{
+   if(finished)return;
+   try{
+    if(response.status!=='ok'||!response.table){throw Error(response.errors?.[0]?.detailed_message||response.errors?.[0]?.message||'Google Sheets لم يُرجع جدولًا');}
+    const table=response.table;
+    const header=(table.cols||[]).map(c=>c.label||'');
+    const rows=(table.rows||[]).map(r=>(r.c||[]).map(c=>c?(c.f??c.v??'').toString():''));
+    finished=true;clean();resolve([header,...rows]);
+   }catch(e){fail(e)}
+  };
+  const params=new URLSearchParams({gid:BOOK_GID,tqx:`out:json;responseHandler:${name}`,headers:'1'});
+  script.src=`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?${params}`;
+  script.async=true;
+  script.onerror=()=>fail(Error('تعذّر تحميل بيانات Google Visualization'));
+  const timer=setTimeout(()=>fail(Error('انتهت مهلة اتصال Google Sheets')),12000);
+  document.head.appendChild(script);
+ });
+}
+async function load(){
+ const state=document.getElementById('status'),cards=document.getElementById('cards');
+ let records=null;const errors=[];
+ // Prefer JSONP because a CSV URL may be blocked by CORS on GitHub Pages.
+ try{records=mapBooks(await readVisualization())}catch(e){errors.push(e.message||String(e))}
+ if(records===null){
+  for(const url of CSV_URLS){
+   try{records=mapBooks(await readURL(url));break}
+   catch(e){errors.push(e.message||String(e))}
+  }
+ }
+ if(records===null){
+  state.classList.add('error');
+  state.innerHTML='تعذّر تحميل مؤلفات البدائع من Google Sheets. تأكد أن <strong>الملف نفسه</strong> متاح لأي شخص لديه الرابط بصلاحية مشاهد، أو اختر «ملف ← مشاركة ← نشر على الويب» وحدد ورقة المؤلفات، ثم أعد المحاولة. <a target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/'+SHEET+'/edit?gid='+BOOK_GID+'#gid='+BOOK_GID+'">فتح الورقة</a>.';
+  console.warn('Books loading failed',errors);
+  return;
+ }
+ state.textContent=`عدد المؤلفات: ${records.length}`;
+ cards.innerHTML=records.length?records.map(item=>
+  `<article class="card"><h2>${escapeHTML(item.book)}</h2><p class="author"><strong>المؤلف:</strong> ${escapeHTML(item.author||'غير مذكور')}</p>${item.link?`<a class="book-link" href="${escapeHTML(item.link)}" target="_blank" rel="noopener noreferrer">قراءة الكتاب ↗</a>`:''}</article>`
+ ).join(''):'<div class="state">لا توجد مؤلفات في الورقة بعد.</div>';
+}
+load();
+</script>
+</body>
+</html>

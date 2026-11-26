@@ -1,0 +1,26 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>خرائط البدائع | أوائل البدائع</title><link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet"><style>
+:root{color-scheme:light;--ink:#243c30}*{box-sizing:border-box}body{margin:0;background:#f5f3ee;color:var(--ink);direction:rtl;font-family:"Traditional Arabic","Amiri",Georgia,serif;font-size:21px;line-height:1.65}
+header{background:linear-gradient(135deg,#321a34,#6b304f);padding:16px;text-align:center;color:#ffe6b4}header img{width:100%;max-width:920px;max-height:260px;object-fit:cover;border-radius:12px}main{max-width:1000px;margin:auto;padding:20px}h1{margin:10px 0;font-size:2rem}.sub{color:#786f65;margin:0 0 14px}.back{display:inline-block;padding:5px 20px;background:#d9aa5b;color:#39241c;border-radius:99px;text-decoration:none;font-weight:700}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin-top:20px}.card{background:white;border:1px solid #e4dbc9;border-radius:18px;padding:18px;box-shadow:0 8px 19px #3e342114}.card h2{font-size:1.4rem;margin:0;color:#3f2942}.card p{margin:8px 0;color:#666}.card a{display:inline-block;margin-top:8px;background:#165d46;color:#fff;border-radius:99px;padding:4px 14px;text-decoration:none;font-weight:bold}.notice{background:#fff7e7;border:1px solid #e3c995;border-radius:13px;padding:12px;margin:12px 0}.error{color:#a74b2f}
+</style></head><body><header><img src="header.png" alt="أوائل البدائع"></header><main><a class="back" href="index.html">العودة للرئيسية</a><h1>خرائط البدائع</h1><p class="sub">الخرائط التاريخية والجغرافية للبدائع، تُحدّث من ورقة «خرائط البدائع» في Google Sheets.</p><div id="status" class="notice">جارٍ تحميل الخرائط…</div><section id="cards" class="cards"></section></main><script>
+const SHEET='18FZ9C_NXx6yvcg6bFBiM8oe7Lk6A7fZs09CWyCVGSiQ';
+function csv(s){s=s.replace(/^\uFEFF/,'');let data=[],row=[],cell='',quote=false;for(let i=0;i<s.length;i++){let c=s[i];if(c==='"'){if(quote&&s[i+1]==='"'){cell+='"';i++}else quote=!quote}else if(c===','&&!quote){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!quote){if(c==='\r'&&s[i+1]==='\n')i++;row.push(cell);if(row.some(x=>x.trim()))data.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(x=>x.trim()))data.push(row);return data}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function url(s){try{const u=new URL(String(s||'').trim());return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}
+function okay(s){return ['true','1','yes','نعم','صح','✓','✔','☑','✅','checked'].includes(String(s||'').toLowerCase().trim())}
+async function loadRows(u){const c=new AbortController;let timeout=setTimeout(()=>c.abort(),12000);try{let r=await fetch(u,{signal:c.signal,cache:'no-store'});if(!r.ok)throw Error('خطأ في قراءة Google Sheets');let t=await r.text();if(/^\s*<!doctype|^\s*<html/i.test(t))throw Error('الورقة غير متاحة للعامة');return csv(t)}finally{clearTimeout(timeout)}}
+function col(header,words,defaultIndex){let i=header.findIndex(v=>words.some(w=>v.includes(w)));return i>=0?i:defaultIndex}
+
+
+const fallback={title:'خريطة البدائع',url:'https://www.google.com/maps/d/viewer?mid=1Nd7Lm6tPtnhbHgiqjBR6sREsIKcnO8o',desc:'خريطة البدائع في خرائطي — Google Maps'};
+async function go(){let maps=[];
+ try{
+ const rows=await loadRows(`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:csv&gid=636607894`);
+ const h=(rows[0]||[]).map(x=>x.trim());let linkIdx=col(h,['الرابط','رابط','الخريطة','url','URL'],1),nameIdx=col(h,['الاسم','العنوان','الخريطة','اسم'],0),descIdx=col(h,['الوصف','تعريف','نبذة'],2),approveIdx=col(h,['الموافقة'], -1);
+ maps=rows.slice(1).filter(r=>approveIdx<0||okay(r[approveIdx])).map(r=>{let link=url(r[linkIdx])||r.map(url).find(Boolean);return {title:(r[nameIdx]||'خريطة البدائع').trim(),desc:r[descIdx]||'',url:link}}).filter(x=>x.url);
+ }catch(err){document.getElementById('status').textContent='تعذر قراءة الشيت حاليًا. يمكنك فتح الخريطة الأساسية أدناه.'}
+ if(!maps.length)maps=[fallback];
+ const unique=[...new Map(maps.map(m=>[m.url,m])).values()];
+ document.getElementById('status').textContent=`عدد الخرائط المعروضة: ${unique.length}`;
+ document.getElementById('cards').innerHTML=unique.map(x=>`<article class="card"><h2>${esc(x.title)}</h2><p>${esc(x.desc)}</p><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">فتح الخريطة ↗</a></article>`).join('');
+}go();
+</script></body></html>
